@@ -1,18 +1,24 @@
 import speech_recognition as sr
 import timeit
-import pyttsx
 import os
-import thread
+import random
+import sched, time
+import _thread
 
-def processSpeech():
-    thread.start_new_thread(os.system,('afplay Morse.aiff',)) # play a sound to let the driver know they can speak
+def queryDriver():
+    print(time.time())
+    # obtain audio from the microphone
+    r = sr.Recognizer()
+    os.system('say is now a good time?')
+
+    _thread.start_new_thread(os.system,('afplay Morse.aiff',)) # play a sound to let the driver know they can speak
 
     try:
         with sr.Microphone() as source:
             print("Say something!")
             audio = r.listen(source, timeout=5.0)
 
-        # recognize speech using Google Speech Recognition
+        # recognize speech using Google Speech Recognition [2]
         start_time = timeit.default_timer()
         try:
             # for testing purposes, we're just using the default API key
@@ -27,24 +33,20 @@ def processSpeech():
         except sr.RequestError as e:
             print("Could not request results from Google Speech Recognition service; {0}".format(e))
         print("Google: " + str(timeit.default_timer() - start_time))
-        
+
     except sr.WaitTimeoutError:
         print("Speech timeout, assume 'no'")
 
+# set up a scheduler to pick random times to say is now a good time [1]
+s = sched.scheduler(time.time, time.sleep)
 
-# def onEnd(name, completed):
-#     processSpeech()         # listen and process the answer
-#     engine.endLoop()        # stop the tts engine
-#     print("finishing", name, completed)
+while True:
+    print(time.time())
+    ask_time = random.randint(30,3*60) # wait time in seconds
+    print(ask_time)
+    s.enter(ask_time, 1, queryDriver, ())
+    s.run()
 
-
-# obtain audio from the microphone
-r = sr.Recognizer()
-os.system('say is now a good time?')
-processSpeech()
-
-# # initialize the speech system
-# engine = pyttsx.init()
-# engine.connect('finished-utterance', onEnd)
-# engine.say('Is now a good time?', 'now')
-# engine.startLoop()
+# Resources
+# [1] Event scheduling - https://docs.python.org/2/library/sched.html
+# [2] Speech Recognition - https://pypi.python.org/pypi/SpeechRecognition/
