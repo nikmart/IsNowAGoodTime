@@ -1,11 +1,10 @@
 import speech_recognition as sr
 import timeit
-import pyttsx
 import os
-import thread
+import _thread
 
 def processSpeech():
-    thread.start_new_thread(os.system,('afplay Morse.aiff',)) # play a sound to let the driver know they can speak
+    _thread.start_new_thread(os.system,('afplay Morse.aiff',)) # play a sound to let the driver know they can speak
 
     try:
         with sr.Microphone() as source:
@@ -27,7 +26,7 @@ def processSpeech():
         except sr.RequestError as e:
             print("Could not request results from Google Speech Recognition service; {0}".format(e))
         print("Google: " + str(timeit.default_timer() - start_time))
-        
+
     except sr.WaitTimeoutError:
         print("Speech timeout, assume 'no'")
 
