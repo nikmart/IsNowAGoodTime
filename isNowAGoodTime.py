@@ -9,14 +9,14 @@ def queryDriver():
     # write the ask time to the file
     f.write(str(time.time()) + ',')
 
-    # obtain audio from the microphone
-    r = sr.Recognizer()
     os.system('say is now a good time?')
 
     _thread.start_new_thread(os.system,('afplay Morse.aiff',)) # play a sound to let the driver know they can speak
 
+
     try:
-        with sr.Microphone() as source:
+        with sr.Microphone(device_index=2) as source:
+            print(source)
             print("Say something!")
             audio = r.listen(source, timeout=5.0)
 
@@ -34,15 +34,26 @@ def queryDriver():
         except sr.UnknownValueError:
             print("Google Speech Recognition could not understand audio")
             f.write('N/A,error\n')
+            response = 'error'
         except sr.RequestError as e:
             print("Could not request results from Google Speech Recognition service; {0}".format(e))
             f.write('N/A,error\n')
+            response = 'error'
         print("Google: " + str(timeit.default_timer() - start_time))
 
     except sr.WaitTimeoutError:
         print("Speech timeout, assume 'no'")
         f.write('no,timeout\n')
+        response = 'no'
 
+    os.system('say OK,' + response)
+
+## Find the audio devices
+# import pyaudio
+# p = pyaudio.PyAudio()
+# for i in range(p.get_device_count()):
+#     info = p.get_device_info_by_index(i)
+#     print(info['index'], info['name'])
 
 # set up a file to log the question times and the answers [3]
 f = open('isNowAGoodTime_labels' + str(int(time.time())) + '.csv', 'w')
@@ -51,9 +62,12 @@ f.write('time,label,note\n')
 # set up a scheduler to pick random times to say is now a good time [1]
 s = sched.scheduler(time.time, time.sleep)
 
+# obtain audio from the microphone
+r = sr.Recognizer()
+
 while True:
     print(time.time())
-    ask_time = random.randint(30,3*60) # wait time in seconds
+    ask_time = random.randint(10,60) # wait time in seconds
     print(ask_time)
     s.enter(ask_time, 1, queryDriver, ())
     s.run()
