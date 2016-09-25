@@ -67,7 +67,7 @@ s = sched.scheduler(time.time, time.sleep)
 
 while True:
     print(time.time())
-    ask_time = random.randint(1,3) # wait time in seconds
+    ask_time = random.randint(30,3*60) # wait time in seconds
     print(ask_time)
     s.enter(ask_time, 1, queryDriver, ())
     s.run()
