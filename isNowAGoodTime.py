@@ -13,6 +13,7 @@ CHANNELS = 2
 RATE = 44100
 RECORD_SECONDS = 5
 
+# record the audio after a question is asked [4]
 def recordAudio():
     p = pyaudio.PyAudio()
     stream = p.open(format=FORMAT,
@@ -72,3 +73,4 @@ while True:
 # [1] Event scheduling - https://docs.python.org/2/library/sched.html
 # [2] Speech Recognition - https://pypi.python.org/pypi/SpeechRecognition/
 # [3] Writing to files - https://docs.python.org/2/tutorial/inputoutput.html#reading-and-writing-files
+# [4] Record Audio - http://people.csail.mit.edu/hubert/pyaudio/
