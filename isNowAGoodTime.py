@@ -9,9 +9,10 @@ import wave
 
 CHUNK = 1024
 FORMAT = pyaudio.paInt16
-CHANNELS = 2
+CHANNELS = 1
 RATE = 44100
 RECORD_SECONDS = 5
+MIC = 2 # USB MIC
 
 # record the audio after a question is asked [4]
 def recordAudio():
@@ -20,7 +21,8 @@ def recordAudio():
                     channels=CHANNELS,
                     rate=RATE,
                     input=True,
-                    frames_per_buffer=CHUNK)
+                    frames_per_buffer=CHUNK,
+                    input_device_index = MIC)
 
     print("* recording")
 
@@ -36,13 +38,15 @@ def recordAudio():
     stream.close()
     p.terminate()
 
-    output_file = str(time.time()) + "_answer.wav"
+    output_file = str(int(time.time())) + "_answer.wav"
     wf = wave.open(output_file, 'wb')
     wf.setnchannels(CHANNELS)
     wf.setsampwidth(p.get_sample_size(FORMAT))
     wf.setframerate(RATE)
     wf.writeframes(b''.join(frames))
     wf.close()
+
+    _thread.start_new_thread(os.system,('afplay Pop.aiff',)) # play a sound to let the driver know they can speak
 
 def queryDriver():
     # write the ask time to the file
@@ -56,15 +60,15 @@ def queryDriver():
 
 
 # set up a file to log the question times and the answers [3]
-f = open('isNowAGoodTime_queryTimes' + str(int(time.time())) + '.csv', 'w')
-f.write('time')
+f = open('isNowAGoodTime_queryTimes_' + str(int(time.time())) + '.csv', 'w')
+f.write('time\n')
 
 # set up a scheduler to pick random times to say is now a good time [1]
 s = sched.scheduler(time.time, time.sleep)
 
 while True:
     print(time.time())
-    ask_time = random.randint(1,3) # wait time in seconds
+    ask_time = random.randint(30,3*60) # wait time in seconds
     print(ask_time)
     s.enter(ask_time, 1, queryDriver, ())
     s.run()
