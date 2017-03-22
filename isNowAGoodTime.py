@@ -50,31 +50,31 @@ def recordAudio():
     _thread.start_new_thread(os.system,('afplay ~/IsNowAGoodTime-ParticipantData/sounds/Pop.aiff',)) # play a sound to let the driver know they can speak
 
     AUDIO_FILE = os.path.join(path.dirname(path.realpath(__file__)), output_file)
-    recognizeAudio(AUDIO_FILE)
+    # recognizeAudio(AUDIO_FILE)
 
-def recognizeAudio():
-    # use the audio file as the audio source
-    r = sr.Recognizer()
-    with sr.AudioFile(AUDIO_FILE) as source:
-        audio = r.record(source) # read the entire audio file
-
-    # recognize speech using Google Speech Recognition
-    try:
-        # for testing purposes, we're just using the default API key
-        # to use another API key, use `r.recognize_google(audio, key="GOOGLE_SPEECH_RECOGNITION_API_KEY")`
-        # instead of `r.recognize_google(audio)`
-        print("Google Speech Recognition thinks you said " + r.recognize_google(audio))
-    except sr.UnknownValueError:
-        print("Google Speech Recognition could not understand audio")
-    except sr.RequestError as e:
-        print("Could not request results from Google Speech Recognition service; {0}".format(e))
+# def recognizeAudio():
+#     # use the audio file as the audio source
+#     r = sr.Recognizer()
+#     with sr.AudioFile(AUDIO_FILE) as source:
+#         audio = r.record(source) # read the entire audio file
+#
+#     # recognize speech using Google Speech Recognition
+#     try:
+#         # for testing purposes, we're just using the default API key
+#         # to use another API key, use `r.recognize_google(audio, key="GOOGLE_SPEECH_RECOGNITION_API_KEY")`
+#         # instead of `r.recognize_google(audio)`
+#         print("Google Speech Recognition thinks you said " + r.recognize_google(audio))
+#     except sr.UnknownValueError:
+#         print("Google Speech Recognition could not understand audio")
+#     except sr.RequestError as e:
+#         print("Could not request results from Google Speech Recognition service; {0}".format(e))
 
 def queryDriver():
     # write the ask time to the file
     f.write(str(time.time()) + '\n')
 
-    os.system('say is now a good time?')
-
+    #os.system('say is now a good time?')
+    os.system('afplay isNowAGoodTime.m4a')
     _thread.start_new_thread(os.system,('afplay ~/IsNowAGoodTime-ParticipantData/sounds/Morse.aiff',)) # play a sound to let the driver know they can speak
 
     recordAudio()
@@ -87,6 +87,11 @@ print(os.getcwd())
 
 # set up a scheduler to pick random times to say is now a good time [1]
 s = sched.scheduler(time.time, time.sleep)
+
+# do a test question
+ask_time = 5
+s.enter(ask_time, 1, queryDriver, ())
+s.run()
 
 while True:
     print(time.time())
