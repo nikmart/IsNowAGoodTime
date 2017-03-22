@@ -6,6 +6,7 @@ import sched, time
 import _thread
 import pyaudio
 import wave
+import sys
 
 CHUNK = 1024
 FORMAT = pyaudio.paInt16
@@ -45,7 +46,7 @@ def recordAudio():
     wf.writeframes(b''.join(frames))
     wf.close()
 
-    _thread.start_new_thread(os.system,('afplay Pop.aiff',)) # play a sound to let the driver know they can speak
+    _thread.start_new_thread(os.system,('afplay ~/IsNowAGoodTime-ParticipantData/sounds/Pop.aiff',)) # play a sound to let the driver know they can speak
 
 def queryDriver():
     # write the ask time to the file
@@ -53,7 +54,7 @@ def queryDriver():
 
     os.system('say is now a good time?')
 
-    _thread.start_new_thread(os.system,('afplay Morse.aiff',)) # play a sound to let the driver know they can speak
+    _thread.start_new_thread(os.system,('afplay ~/IsNowAGoodTime-ParticipantData/sounds/Morse.aiff',)) # play a sound to let the driver know they can speak
 
     recordAudio()
 
@@ -61,13 +62,14 @@ def queryDriver():
 # set up a file to log the question times and the answers [3]
 f = open('isNowAGoodTime_queryTimes_' + str(int(time.time())) + '.csv', 'w')
 f.write('time\n')
+print(os.getcwd())
 
 # set up a scheduler to pick random times to say is now a good time [1]
 s = sched.scheduler(time.time, time.sleep)
 
 while True:
     print(time.time())
-    ask_time = random.randint(30,3*60) # wait time in seconds
+    ask_time = random.randint(30,2*60) # wait time in seconds
     print(ask_time)
     s.enter(ask_time, 1, queryDriver, ())
     s.run()
