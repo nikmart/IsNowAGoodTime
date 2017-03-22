@@ -47,9 +47,9 @@ def recordAudio():
     wf.writeframes(b''.join(frames))
     wf.close()
 
-    _thread.start_new_thread(os.system,('afplay ~/IsNowAGoodTime-ParticipantData/sounds/Pop.aiff',)) # play a sound to let the driver know they can speak
+    os.system('afplay ~/IsNowAGoodTime-ParticipantData/sounds/Pop.aiff') # play a sound to let the driver know they can speak
 
-    AUDIO_FILE = os.path.join(path.dirname(path.realpath(__file__)), output_file)
+    # AUDIO_FILE = os.path.join(path.dirname(path.realpath(__file__)), output_file)
     # recognizeAudio(AUDIO_FILE)
 
 # def recognizeAudio():
@@ -74,10 +74,10 @@ def queryDriver():
     f.write(str(time.time()) + '\n')
 
     #os.system('say is now a good time?')
-    os.system('afplay isNowAGoodTime.m4a')
-    _thread.start_new_thread(os.system,('afplay ~/IsNowAGoodTime-ParticipantData/sounds/Morse.aiff',)) # play a sound to let the driver know they can speak
+    os.system('afplay ~/IsNowAGoodTime-ParticipantData/sounds/isNowAGoodTime.m4a')
+    os.system('afplay ~/IsNowAGoodTime-ParticipantData/sounds/Morse.aiff') # play a sound to let the driver know they can speak
 
-    recordAudio()
+    #recordAudio()
 
 
 # set up a file to log the question times and the answers [3]
@@ -89,7 +89,7 @@ print(os.getcwd())
 s = sched.scheduler(time.time, time.sleep)
 
 # do a test question
-ask_time = 5
+ask_time = 2
 s.enter(ask_time, 1, queryDriver, ())
 s.run()
 
