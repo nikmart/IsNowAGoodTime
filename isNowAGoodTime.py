@@ -75,7 +75,7 @@ def queryDriver():
 
     #os.system('say is now a good time?')
     os.system('afplay ~/IsNowAGoodTime-ParticipantData/sounds/isNowAGoodTime.m4a')
-    os.system('afplay ~/IsNowAGoodTime-ParticipantData/sounds/Morse.aiff') # play a sound to let the driver know they can speak
+    #os.system('afplay ~/IsNowAGoodTime-ParticipantData/sounds/Morse.aiff') # play a sound to let the driver know they can speak
 
     #recordAudio()
 
