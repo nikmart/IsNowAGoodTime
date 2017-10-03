@@ -9,10 +9,9 @@ Purpose: Convert the GPS data into a CSV that is readable by tools like
 Requirements: Python 3
               pynmea2
 
-Usage: python convertGPS.py [gps_data] [starttime] [session]
+Usage: python convertGPS.py [gps_data] [starttime]
 [gps_data]: csv file with the raw gps data
 [starttime]: UNIX timestamp from the start of the quad video
-[session]: participant session name
 """
 
 import pynmea2
@@ -59,9 +58,9 @@ for line in f:
 
 print("Data time = {} minutes".format(round(time/60,1)))
 if time/60 < 40:
-    print("Data looks short...possibly not all there")
+    print("GPS data looks short...possibly not all there")
 else:
-    print("Data length looks OK")
+    print("GPS data length looks OK")
 
 f.close()
 output.close()
