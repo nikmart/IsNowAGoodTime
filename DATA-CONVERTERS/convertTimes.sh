@@ -16,17 +16,17 @@ videostart=$(head -n 1 $directory/VIDEO/QUAD/*.txt | tr ' ' '\n' | perl -MScalar
 
 echo $videostart
 
-echo "Converting data..."
-(python3 convertBio.py $directory/BIOPHYS/*.csv $videostart ; echo "Biosignals Converted!") &
+echo "Converting data...\n"
+#(python3 convertBio.py $directory/BIOPHYS/*.csv $videostart ; echo "Biosignals Converted!") &
 (python3 convertIMU.py $directory/IMU/*.csv $videostart ; echo "IMU Converted!") &
 (python3 convertResponses.py $directory/RESPONSES/*.csv $videostart ; echo "Responses Converted!") &
-(python3 gpsConverter.py $directory/GPS/*.csv $videostart ; echo "GPS Converted!") &
+(python3 convertGPS.py $directory/GPS/*.csv $videostart ; echo "GPS Converted!") &
 (python processCAN.py $directory/CAN/*.txt $videostart ; echo "CAN Converted!") &&
 
-echo "Moving data..."
+echo "Moving data...\n"
 
 mv *.csv $directory/SYNCED-DATA
 
-echo "Data in directory"
+echo "Data in directory\n"
 
 ls $directory/SYNCED-DATA
