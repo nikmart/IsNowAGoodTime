@@ -2,3 +2,7 @@ Morse.aiff
 Pop.aiff
 *.csv
 isNowAGoodTime.m4a
+
+# Python Notebook files
+*.ipynb_checkpoints
+.DS_Store
