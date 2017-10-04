@@ -14,7 +14,7 @@ echo "Getting the video start in Unix time"
 
 videostart=$(head -n 1 $directory/VIDEO/QUAD/*.txt | tr ' ' '\n' | perl -MScalar::Util -ne 'Scalar::Util::looks_like_number($_) && print')
 
-echo $videostart
+echo "Video start = $videostart"
 
 echo "Converting data...\n"
 #(python3 convertBio.py $directory/BIOPHYS/*.csv $videostart ; echo "Biosignals Converted!") &
