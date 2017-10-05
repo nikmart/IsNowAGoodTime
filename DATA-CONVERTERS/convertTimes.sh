@@ -21,7 +21,7 @@ echo "Converting data...\n"
 (python convertIMU.py $directory/IMU/*.csv $videostart ; echo "IMU Converted!") &
 (python convertResponses.py $directory/RESPONSES/*.csv $videostart ; echo "Responses Converted!") &
 (python convertGPS.py $directory/GPS/*.csv $videostart ; echo "GPS Converted!") &
-(python2 processCAN.py $directory/CAN/*.txt $videostart ; echo "CAN Converted!") &&
+(python convertCAN.py $directory/CAN/*.txt $videostart ; echo "CAN Converted!") &&
 
 echo "Moving data...\n"
 

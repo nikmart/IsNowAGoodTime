@@ -78,6 +78,12 @@ speed_out.close()
 accel_out.close()
 
 
+print("Data time = {} minutes".format(round(data_time/60,2)))
+if data_time/60 < 40:
+    print("CAN data looks short...possibly not all there")
+else:
+    print("CAN data is longer than 40 mins, looks OK")
+
 ## References
 # [1] Prius CAN Codes: https://www.vassfamily.net/ToyotaPrius/CAN/PriusCodes.xls
 # [2] Prius CAN Codes: http://illmatics.com/car_hacking.pdf

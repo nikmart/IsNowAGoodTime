@@ -14,25 +14,35 @@ Usage: python convertResponses.py [response_data] [starttime]
 
 import sys
 
-response_data = sys.argv[1]
-starttime = sys.argv[2]
+# CONSTANTS
+# names of shit go here
 
-# create the output file
+COMPTIME_IDX = 0
+
+## get file and start time from cmd line args
+
+response_data = sys.argv[1]
+starttime = float(sys.argv[2])
+
+## create output file
+
 output = open('response_out.csv', 'w')
 output.write("time\n")
 
 with open(response_data, newline='\n') as csvfile:
-    for data_time in csvfile:
-        if data_time != "time\n":
-            if float(data_time) - float(starttime) > 0:
-                time = float(data_time) - float(starttime)
-                output.write("{}\n".format(time))
+    for row in csvfile:
+        row = row.strip()
+        # only convert properley formatted data lines
+        if row != "time":
+            time = float(row) - starttime
+            # only write out time that is greater than zero, the begining of vid
+            if time >= 0:
+                output.write('{}\n'.format(time))
 
-# Check that the data seems like the right length
-print("Data time = {} minutes".format(round(time/60,1)))
+print("Data time = {} minutes".format(round(time/60,2)))
 if time/60 < 40:
     print("Response data looks short...possibly not all there")
 else:
-    print("Response data length looks OK")
+    print("Response data is longer than 40 mins, looks OK")
 
 output.close()
