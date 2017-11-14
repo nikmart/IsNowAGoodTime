@@ -99,6 +99,7 @@ with open(can_data, 'r') as f:
 brake_out.close()
 speed_out.close()
 accel_out.close()
+steering_wheel_out.close()
 
 
 print("Data time = {} minutes".format(round(data_time/60,2)))
