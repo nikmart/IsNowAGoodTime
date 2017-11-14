@@ -1,7 +1,8 @@
 """
 convertCAN.py
 
-Author: Nik Martelaro (nikmart@stanford.edu)
+Authors: Nik Martelaro (nikmart@stanford.edu)
+         Jesus Mancilla (jesus@scrapworks.org)
 
 Purpose: Convert the CAN data into a CSV that is readable by tools like
          ChronoViz and other data analysis software. Convert the UNIX timestamp
@@ -33,16 +34,23 @@ SPEED_DATA = 12
 ACCEL_ID = 0x0245
 ACCEL_DATA = 9
 
+WHEEL_ID = 0x0025
+WHEEL_ROTATION = 7
+WHEEL_ANGLE = 8
+angleValue = 360/255
+
 can_data = sys.argv[1] # filename for CAN data
 starttime = float(sys.argv[2]) # the UNIX start time of the video recording
 
 speed_out = open('speed_out.csv','w') # write data to a converted output file
 brake_out = open('brake_out.csv','w') # write data to a converted output file
 accel_out = open('accel_pedal_out.csv','w') # write data to a converted output file
+steering_wheel_out = open('steering_wheel_out.csv','w') # write data to a converted output file
 
 speed_out.write('time,speed\n')
 brake_out.write('time,brake\n')
 accel_out.write('time,accel\n')
+steering_wheel_out.write('time,angle\n')
 
 # Load a data file as read only
 with open(can_data, 'r') as f:
@@ -72,6 +80,21 @@ with open(can_data, 'r') as f:
             if canID == ACCEL_ID:
                 hexAccel = int("".join(data[ACCEL_DATA]), 16)
                 accel_out.write("{},{}\n".format(data_time, hexAccel/2))
+
+            # STEERING WHEEL ROTATION
+            if canID == WHEEL_ID:
+                rotationValue = int("".join(data[WHEEL_ROTATION]), 16)
+                hexAngle = int("".join(data[WHEEL_ANGLE]), 16)
+                if rotationValue == 15:
+                    angle = 360 - (hexAngle * angleValue)
+                elif rotationValue == 14:
+                    angle = (360 - (hexAngle * angleValue)) + 360
+                elif rotationValue == 0:
+                    angle = -(hexAngle * angleValue)
+                else:
+                    angle = -(hexAngle * angleValue) -360
+                steering_wheel_out.write("{},{}\n".format(data_time, angle))
+
 
 brake_out.close()
 speed_out.close()
