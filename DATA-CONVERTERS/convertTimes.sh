@@ -12,7 +12,7 @@ mkdir $directory/"SYNCED-DATA"
 
 echo "Getting the video start in Unix time"
 
-videostart=$(head -n 1 $directory/VIDEO/QUAD/*.txt | tr ' ' '\n' | perl -MScalar::Util -ne 'Scalar::Util::looks_like_number($_) && print')
+videostart=$(tail -n 1 $directory/VIDEO/QUAD/*.txt | tr ' ' '\n' | perl -MScalar::Util -ne 'Scalar::Util::looks_like_number($_) && print')
 
 echo "Video start = $videostart"
 
